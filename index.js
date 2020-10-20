@@ -12,11 +12,15 @@ import musicRouter from './routes/music.js';
 
 const HOST = '127.0.0.1';
 const PORT = 5000;
-const databaseURI = 'mongodb://localhost/restful-api-intro';
+export const databaseURI = 'mongodb://localhost/restful-api-intro';
 
 // Creacion del servidor
 const server = express();
-mongoose.connect(databaseURI);
+mongoose.connect(databaseURI, {
+  useFindAndModify: false,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 // El servidor utilizará como deserializador de data bodyparser y deserializara en JSON
 server.use(bodyParser.json());
