@@ -50,6 +50,7 @@ export const createMusic = async (request, response) => {
   try {
     // Called a function that is declared in the resource model
     const newMusicResource = await createMusicResource(body);
+    console.log({ newMusicResource });
     return response.status(201).send(newMusicResource);
   } catch (error) {
     // Because Daytabases can be in other location we can't assume that every DB request is succesful

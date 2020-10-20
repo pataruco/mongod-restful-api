@@ -1,5 +1,18 @@
 import { promises as fs } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+import mongoose from 'mongoose';
+
+const musicSchema = new mongoose.Schema(
+  {
+    title: String,
+    artist: String,
+  },
+  {
+    timestamps: true,
+  },
+);
+
+const Music = mongoose.model('Music', musicSchema);
 
 export const getAllMusic = async () => {
   const musicList = await fs.readFile('./data/music.json');
@@ -14,20 +27,16 @@ export const getMusicResourceById = async (id) => {
 };
 
 export const createMusicResource = async (data) => {
-  const musicListFile = await fs.readFile('./data/music.json');
-  const { music } = JSON.parse(musicListFile);
+  const { title, artist } = data;
 
-  const newMusicResource = { ...data, id: uuidv4() };
-  music.push(newMusicResource);
-
-  await fs.writeFile(
-    './data/music.json',
-    JSON.stringify({
-      music,
-    }),
-  );
-
-  return newMusicResource;
+  try {
+    const musicResource = await Music.create({ title, artist });
+    return musicResource;
+  } catch (error) {
+    throw Error(
+      `Unable to save ${JSON.stringify(data)} on database, ${error}.`,
+    );
+  }
 };
 
 export const updateMusicResource = async (id, data) => {
