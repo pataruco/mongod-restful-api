@@ -9,12 +9,14 @@ import {
 // From the URL GET /music
 export const listMusic = async (request, response, next) => {
   // Called a function that is declared in the resource model
-  const musicList = await getAllMusic();
-  // Once music is fetched we parse to JS
-  const music = JSON.parse(musicList);
-  response.statusCode = 200;
-  // And then send it to client
-  response.send(music);
+  try {
+    const musicList = await getAllMusic();
+    return response.status(200).send(musicList);
+  } catch (error) {
+    return response.status(500).send({
+      message: `Error: not connection to database, ${error}.`,
+    });
+  }
 };
 
 // From the URL GET /music/:id
@@ -88,9 +90,9 @@ export const deleteMusicById = async (request, response) => {
 
   try {
     // Called a function that is declared in the resource model
-    const deleteMessage = await deleteMusicResource(id);
+    await deleteMusicResource(id);
     return response.status(200).send({
-      message: deleteMessage,
+      message: `Resource music ${id} has been deleted`,
     });
   } catch (error) {
     // if resource is not found send error message

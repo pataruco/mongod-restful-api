@@ -1,87 +1,61 @@
-import { promises as fs } from 'fs';
-import { v4 as uuidv4 } from 'uuid';
+import mongoose from 'mongoose';
+
+const musicSchema = new mongoose.Schema(
+  {
+    title: String,
+    artist: String,
+  },
+  {
+    timestamps: true,
+  },
+);
+
+const Music = mongoose.model('Music', musicSchema);
 
 export const getAllMusic = async () => {
-  const musicList = await fs.readFile('./data/music.json');
-  return musicList;
+  try {
+    return await Music.find();
+  } catch (error) {
+    throw Error(error);
+  }
 };
 
 export const getMusicResourceById = async (id) => {
-  const musicListFile = await fs.readFile('./data/music.json');
-  const { music } = JSON.parse(musicListFile);
-  const musicResource = music.find((item) => item.id === id);
-  return musicResource;
+  try {
+    return await Music.findById(id);
+  } catch (error) {
+    throw Error(error);
+  }
 };
 
 export const createMusicResource = async (data) => {
-  const musicListFile = await fs.readFile('./data/music.json');
-  const { music } = JSON.parse(musicListFile);
+  const { title, artist } = data;
 
-  const newMusicResource = { ...data, id: uuidv4() };
-  music.push(newMusicResource);
-
-  await fs.writeFile(
-    './data/music.json',
-    JSON.stringify({
-      music,
-    }),
-  );
-
-  return newMusicResource;
+  try {
+    return await Music.create({ title, artist });
+  } catch (error) {
+    throw Error(
+      `Unable to save ${JSON.stringify(data)} on database, ${error}.`,
+    );
+  }
 };
 
 export const updateMusicResource = async (id, data) => {
-  // Traje todo el archivo
-  const musicListFile = await fs.readFile('./data/music.json');
-  // transforme la data del archivo en una coleccion de JS y destruture
-  // la data de la unica propiedad del objeto llamada music que tiene
-  // un array de objetos
-  const { music } = JSON.parse(musicListFile);
-  // Busque el objeto dentro del array
-  const musicResource = music.find((item) => item.id === id);
-
-  if (musicResource) {
-    // Busque su numero de posicion para luego cambiar sus valores
-    const index = music.indexOf(musicResource);
-    // Cambie sus valores, pero conserve el valor de id
-    music[index] = { ...data, id };
-    // grabo en disco
-    await fs.writeFile(
-      './data/music.json',
-      JSON.stringify({
-        music,
-      }),
+  try {
+    return await Music.findByIdAndUpdate(id, { ...data });
+  } catch (error) {
+    throw Error(
+      `Unable to save ${JSON.stringify(data)} on database, ${error}.`,
     );
-    // retorno el valor
-    return { ...data, id };
-  } else {
-    throw new Error(`Resource music with ${id} is not found.`);
   }
 };
 
 export const deleteMusicResource = async (id) => {
-  // Traje todo el archivo
-  const musicListFile = await fs.readFile('./data/music.json');
-  // transforme la data del archivo en una coleccion de JS y destruture
-  // la data de la unica propiedad del objeto llamada music que tiene
-  // un array de objetos
-  const { music } = JSON.parse(musicListFile);
-  // Busque el objeto dentro del array
-  const musicResource = music.find((item) => item.id === id);
-
-  if (musicResource) {
-    // Busque su numero de posicion para luego cambiar sus valores
-    const index = music.indexOf(musicResource);
-    music.splice(index, 1);
-    // grabo en disco
-    await fs.writeFile(
-      './data/music.json',
-      JSON.stringify({
-        music,
-      }),
-    );
-    return `The music resource ${id} has been deleted`;
-  } else {
-    throw new Error(`Resource music with ${id} is not found.`);
+  try {
+    return await Music.findOneAndDelete(id);
+  } catch (error) {
+    throw Error(error);
   }
 };
+
+export default Music;

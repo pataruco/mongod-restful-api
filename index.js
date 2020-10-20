@@ -1,5 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+
 import logger from './lib/logger.js';
 // midlewares
 import httpLoggerMiddleware from './middleware/logger-middleware.js';
@@ -10,9 +12,15 @@ import musicRouter from './routes/music.js';
 
 const HOST = '127.0.0.1';
 const PORT = 5000;
+export const databaseURI = 'mongodb://localhost/restful-api-intro';
 
 // Creacion del servidor
 const server = express();
+mongoose.connect(databaseURI, {
+  useFindAndModify: false,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 // El servidor utilizará como deserializador de data bodyparser y deserializara en JSON
 server.use(bodyParser.json());
@@ -30,5 +38,5 @@ server.use(errorHandlerMiddleware);
 // Inicializa el servidor
 server.listen(PORT, () =>
   // utilizando el logger de la libreria winston imprimo en consola que el servidor se ha iniciado
-  logger.info(`server listening ${JSON.stringify({ HOST, PORT })}`),
+  logger.info(`server listening 📡 ${JSON.stringify({ HOST, PORT })}`),
 );
