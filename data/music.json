@@ -1,0 +1,39 @@
+{
+  "music": [
+    {
+      "title": "Redemption song",
+      "artist": "Bob Marley",
+      "id": "46465328-2469-4e01-a0d6-ebe2b3ded08b"
+    },
+    {
+      "title": "Malibu nights",
+      "artist": "Lany",
+      "id": "226a05e5-4d8b-4eeb-825d-d68992dc5fea"
+    },
+    {
+      "title": "Nothing else matters",
+      "artist": "Metallica",
+      "id": "bd38e155-4f1a-4c60-9b69-7442488bf895"
+    },
+    {
+      "title": "Ghost town",
+      "artist": "The Specials",
+      "id": "ae26f14f-6ea6-4a38-9e27-7e8a3adaed85"
+    },
+    {
+      "title": "So Payaso",
+      "artist": "Extremoduro",
+      "id": "40b73420-9418-4c4e-aa49-6eac5829ca54"
+    },
+    {
+      "title": "Tiembla",
+      "artist": "Desorden Publico",
+      "id": "313330d4-9d72-4266-b262-7c0b7d096952"
+    },
+    {
+      "title": "Repetition",
+      "artist": "Max Cooper",
+      "id": "af6b997b-d0f2-4fb3-b3cb-a13173ab3691"
+    }
+  ]
+}
